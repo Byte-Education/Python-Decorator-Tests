@@ -4,6 +4,9 @@ from io import StringIO
 
 
 def test_equals(output, printer=True, *args, **kwargs):
+    """
+    Test if the function run matches the output
+    """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             if(func(*args, **kwargs) == output):
@@ -20,6 +23,7 @@ def test_equals(output, printer=True, *args, **kwargs):
 
 
 def test_true(printer=True, *args, **kwargs):
+    """ Tests to see if the function run returns True """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             if(func(*args, **kwargs)):
@@ -36,6 +40,7 @@ def test_true(printer=True, *args, **kwargs):
 
 
 def test_false(printer=True, *args, **kwargs):
+    """ Tests to see if the function run retuns False """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             if(not func(*args, **kwargs)):
@@ -52,6 +57,7 @@ def test_false(printer=True, *args, **kwargs):
 
 
 def test_raise(error, printer=True, *args, **kwargs):
+    """ Tests to see if the function raises a specific exception """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             try:
@@ -85,6 +91,7 @@ def test_raise(error, printer=True, *args, **kwargs):
 
 
 def test_no_raise(printer=True, *args, **kwargs):
+    """ Tests to see if no exceptions have been raised """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             try:
@@ -109,12 +116,14 @@ def test_no_raise(printer=True, *args, **kwargs):
 
 
 class NullIO(StringIO):
+    """ Used to negate output """
     def write(self, text):
         pass
 
 
 @contextmanager
 def replace_stdin(target):
+    """ Changes Input to a programmed input, negates need to directly input information into the console """
     orig = sys.stdin
     sys.stdin = target
     yield
@@ -123,12 +132,14 @@ def replace_stdin(target):
 
 @contextmanager
 def disable_print():
+    """ Disabled the printing of a function and resets afterwards """
     sys.stdout = NullIO()
     yield
     sys.stdout = sys.__stdout__
 
 
-def test_input(inputValue, printer=True, returns=False, *args, **kwargs):
+def test_input(inputValue, returns=False, *args, **kwargs):
+    """ Tests the input of function, allows for returning a value or not """
     def inner_test(func):
         def wrapper(*args, **kwargs):
             with replace_stdin(StringIO(inputValue)):
