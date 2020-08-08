@@ -1,4 +1,4 @@
-# Python Tester
+# Python Decorator Tests
 
 A Python file that utilizes Decorators as Unit Tests rather than unittest and its assertions.
 
